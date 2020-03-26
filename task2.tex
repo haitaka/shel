@@ -1,0 +1,166 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb,amsbsy}
+\usepackage{cmap}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{svg}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\usepackage{caption,subcaption}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{tabularx}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usepackage{standalone}
+\usepackage{ebproof}
+
+
+\renewcommand{\baselinestretch}{1.5}
+\newcommand{\rulesep}{\unskip\ \vrule\ }
+
+%\renewcommand{\#}{C{\lserif\#}}
+
+\newcommand{\code}[1]{\lstinline$#1$}
+%\newcommand{\code}[1]{#1}
+
+\newcommand{\op}[1]{\operatorname{#1}}
+\newcommand{\sonop}[4]{#1~\leftarrow~\mathbf{#2}[#3](#4)}
+\newcommand{\sonopa}[4]{#1~\leftarrow&~\mathbf{#2}[#3](#4)}
+
+\lstset{captionpos=bellow}
+\lstset{basicstyle=\small\ttfamily,showspaces=false,showstringspaces=false}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}
+
+\theoremstyle{lemma}
+\newtheorem{lemma}{Лемма}
+
+\theoremstyle{statement}
+\newtheorem{statement}{Утверждение}
+
+\renewcommand\qedsymbol{QED}
+
+\newlength{\myleftlen}
+\newcommand{\setmyleftlen}[1]{\settowidth{\myleftlen}{\( \displaystyle
+#1\)}}
+\newcommand{\backup}{\hskip-\myleftlen\mkern-7mu}
+
+\tikzset{>=latex}
+
+\newcommand{\hsomet}[2]{\hsome{\textit{#1}}{\textbf{#2}}}
+\newcommand{\hsome}[2]{\exists#1.#2}
+\newcommand{\honlyt}[2]{\honly{\textit{#1}}{\textbf{#2}}}
+\newcommand{\honly}[2]{\forall#1.#2}
+\newcommand{\his}{\sqsubseteq}
+\newcommand{\hisb}{~{\color{red}\boldsymbol{\sqsubseteq}}~}
+\newcommand{\hand}{\sqcap}
+\newcommand{\hor}{\sqcup}
+
+\title{Решения задач по материалам лекции 2}
+\author{Алексей Глушко}
+
+\begin{document}
+\maketitle
+\section*{Задача 1}
+    \subsection*{а)}
+        Онтология:
+        \begin{align}
+            \hsomet{слушает}{Класика} &\his \honlyt{слушает}{Классика} \label{ax11} \\
+            \hsomet{слушает}{Металл} &\his \honlyt{слушает}{Металл} \label{ax12} \\
+            \textbf{Классика} &\his \neg \textbf{Металл} \label{ax13} \\
+            \textbf{Классический Металлист} &\his \hsomet{слушает}{Классика} \hand \hsomet{слушает}{Металл} \label{ax14}
+        \end{align}
+
+    \subsection*{б)}
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}
+                \node[circle, fill, label={[align=left]$\hsomet{c}{K} \hand \hsomet{c}{M}$ \\ $\hsomet{c}{K}$ \\ $\hsomet{c}{M}$}] (km) at (0, 0) {};
+                \node[circle, fill, label={[align=left]$\textbf{K}$, {\color{red} $\neg \textbf{M}$, $\textbf{M}$}}, color=red] (k) at (4, 0) {};
+                \draw[->] (km) to node[midway,below] {\textit{слушает}} (k);
+            \end{tikzpicture}
+        \end{figure}
+
+    \subsection*{в)}
+        \begin{itemize}
+            \item $\mathcal{O}_1 = \{\text{\ref{ax11}, \ref{ax13}, \ref{ax14}}\}$
+            \item $\mathcal{O}_2 = \{\text{\ref{ax12}, \ref{ax13}, \ref{ax14}}\}$
+        \end{itemize}
+
+\pagebreak
+\section*{Задача 2}
+    \newcommand{\hx}{A \hand \hsome{r}{B}}
+    Построим замыкаение $\op{init}(\hx)$ относительно правил прямого вывода.
+    \begin{align}
+        \text{ax1}:~   & B \hand \hsome{r}{\top} \his C    \tag{ax1} \label{ax1} \\
+        \text{ax2}:~   & A \his \hsome{s}{(A \hand B)}     \tag{ax2} \label{ax2} \\
+        \text{ax3}:~   & \hsome{s}{\hsome{s}{\top}} \his B \tag{ax3} \label{ax3} \\
+                       & \op{init}(\hx)                    \tag{0} \label{x} \\
+        R_0(\ref{x}):~                   & \hx \his \hx               \label{t1} \\
+        R_\top(\ref{x}):~                & \hx \his \top              \label{t2} \\
+        R^-_\hand(\ref{t1}):~            & \hx \his A                 \label{t3} \\
+        R^-_\hand(\ref{t1}):~            & \hx \his \hsome{r}{B}      \label{t4} \\
+        R_{\op{init}}(\ref{t4}):~        & \op{init}(B)           \label{t5} \\
+        R_0(\ref{t5}):~                  & B \his B \\
+        R_\his(\ref{ax2}, \ref{t3}):~    & \hx \his \hsome{s}{A \hand B} \label{t6} \\
+        R_{\op{init}}(\ref{t6}):~        & \op{init}(A \hand B)      \label{t7} \\
+        R_0(\ref{t7}):~                  & A \hand B \his A \hand B   \label{t8} \\
+        R_\top(\ref{t7}):~               & A \hand B \his \top        \label{t9} \\
+        R^{-}_\hand(\ref{t8}):~          & A \hand B \his A           \label{t10} \\
+        R^-_\hand(\ref{t8}):~            & A \hand B \his B           \label{t11} \\
+        R_\his(\ref{ax2}, \ref{t10}):~   & A \hand B \his \hsome{s}{A \hand B} \label{t12} \\
+        R_\exists(\ref{t12}, \ref{t9}):~ & A \hand B \his \hsome{s}{\top}      \label{t13} \\
+        R_\exists(\ref{t6}, \ref{t9}):~  & \hx \his \hsome{s}{\top}            \label{t14} \\
+        R_{\op{init}}(\ref{t13}):~       & \op{init}(\top)                     \label{t15} \\
+        R_0(\ref{t15}):~                 & \top \his \top \\
+    \end{align}
+    Полученное множетсво не содержит формулы $\hx \his C$. \\
+    Следовательно, $\mathcal{O} \nvDash \hx \his C$.
+
+    \begin{figure}[H]
+        \centering
+        \begin{prooftree} %[rule code={\hbox{\tikz \draw (0em,0) -- (\hsize,0);}}] % You should refer to ebproof's manual to twickle lines.
+                        \Infer0[]{\dots}
+                        \Infer1[]{A \hand \hsome{r}{B} \hisb A \hand \hsome{r}{B}}
+                        \Infer1[$R^-_\hand$]{A \hand \hsome{r}{B} \hisb A}
+                        \Infer1[$R_\his(2)$]{A \hand \hsome{r}{B} \hisb \hsome{s}{A \hand B}}
+
+                        \Infer0[]{\dots}
+                        \Infer1[$R_\his(2)$]{A \hand \hsome{r}{B} \hisb \hsome{s}{A \hand B}}
+                        \Infer1[$R_{\op{init}}$]{\op{init}(A \hand B)}
+                        \Infer1[$R_\top$]{A \hand B \hisb \top}
+
+                    \Infer2[$R_\exists$]{A \hand \hsome{r}{B} \hisb \hsome{s}{\top}}
+
+                    \Infer0[]{\dots}
+                    \Infer1[$ $]{\hsome{s}{\top} \hisb \top}
+                \Infer2[$R_\exists$]{A \hand \hsome{r}{B} \hisb \hsome{s}{\hsome{s}{\top}}}
+                \Infer1[$R_\his(3)$]{A \hand \hsome{r}{B} \hisb B}
+
+        \end{prooftree}
+        \begin{prooftree}
+                \Infer0[]{\dots}
+                \Infer1[$R_\his(3)$]{A \hand \hsome{r}{B} \hisb B}
+                    \Infer0[]{\op{init}(A \hand \hsome{r}{B})}
+                    \Infer1[$R_0$]{A \hand \hsome{r}{B} \hisb A \hand \hsome{r}{B}}
+                    \Infer1[$R^-_\hand$]{A \hand \hsome{r}{B} \hisb \hsome{r}{B}}
+
+                    \Infer0[]{\op{init}(A \hand \hsome{r}{B})}
+                    \Infer1[$R_0$]{A \hand \hsome{r}{B} \hisb A \hand \hsome{r}{B}}
+                    \Infer1[$R^-_\hand$]{A \hand \hsome{r}{B} \hisb \hsome{r}{B}}
+                    \Infer1[$R_{\op{init}}$]{\op{init}(B)}
+                    \Infer1[$R_\top$]{B \hisb \top}
+
+                \Infer2[$R_\exists$]{A \hand \hsome{r}{B} \hisb \hsome{r}{\top}}
+
+            \Infer2[$R^+_\hand$]{A \hand \hsome{r}{B} \hisb B \hand \hsome{r}{\top}}
+            \Infer1[$R_\his(2)$]{A \hand \hsome{r}{B} \hisb C}
+        \end{prooftree}
+    \end{figure}
+\end{document}

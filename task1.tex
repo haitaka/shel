@@ -1,0 +1,156 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{cmap}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{svg}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\usepackage{caption,subcaption}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{tabularx}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usepackage{standalone}
+
+
+\renewcommand{\baselinestretch}{1.5}
+\newcommand{\rulesep}{\unskip\ \vrule\ }
+
+%\renewcommand{\#}{C{\lserif\#}}
+
+\newcommand{\code}[1]{\lstinline$#1$}
+%\newcommand{\code}[1]{#1}
+
+\newcommand{\op}[1]{\operatorname{#1}}
+\newcommand{\sonop}[4]{#1~\leftarrow~\mathbf{#2}[#3](#4)}
+\newcommand{\sonopa}[4]{#1~\leftarrow&~\mathbf{#2}[#3](#4)}
+
+\lstset{captionpos=bellow}
+\lstset{basicstyle=\small\ttfamily,showspaces=false,showstringspaces=false}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}
+
+\theoremstyle{lemma}
+\newtheorem{lemma}{Лемма}
+
+\theoremstyle{statement}
+\newtheorem{statement}{Утверждение}
+
+\renewcommand\qedsymbol{QED}
+
+\newlength{\myleftlen}
+\newcommand{\setmyleftlen}[1]{\settowidth{\myleftlen}{\( \displaystyle
+#1\)}}
+\newcommand{\backup}{\hskip-\myleftlen\mkern-7mu}
+
+\tikzset{>=latex}
+
+\title{Решения задач по материалам лекции 1}
+\author{Алексей Глушко}
+
+\begin{document}
+\maketitle
+\section*{Задача 1}
+    \subsection*{а)}
+        Белая вершина пренадлежит интерпретациям понятий вида:
+        \begin{itemize}
+            \item $A$, $B$, $A \sqcap B$
+            \item $ \{\forall/\exists\} r.(B \sqcap \{\forall/\exists\} r.(A \sqcup B)) $
+            \item $ \exists r.((A \sqcup B) \sqcap \{\forall/\exists\} r.(A \sqcup B)) $
+        \end{itemize}
+        а также их непосредственным следствиям.
+
+    \subsection*{б)}
+        \begin{itemize}
+            \item $ A \sqsubseteq \{\forall/\exists\} r.(B \sqcap \{\forall/\exists\} r.(A \sqcup B)) $
+            \item $ B \sqsubseteq \exists r.(A \sqcup B) $
+            \item $ B \sqsubseteq \forall r.B $
+            \item \dots
+        \end{itemize}
+
+\pagebreak
+\section*{Задача 2}
+    Искомая модель:
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}[yscale=-1]
+            \node[circle, fill] (n) at (0, 0) {};
+            \node[circle, draw, label={$A$}] (a) at (2, -1) {};
+            \node[circle, draw, label={$\neg A$}] (na) at (2, 1) {};
+            \node[circle, draw, label={$X$}] (x1) at (4, -1) {};
+            \node[circle, draw, label={$Y$}] (y2) at (4, 1) {};
+
+            \draw[->] (n) to node[midway,above] {r} (a);
+            \draw[->] (n) to node[midway,above] {r} (na);
+
+            \draw[->] (a) to node[midway,above] {r} (x1);
+            \draw[->] (na) to node[midway,above] {r} (y2);
+        \end{tikzpicture}
+    \end{figure}
+
+\section*{Задача 3}
+    Нормализация:
+    \begin{multline*}
+        \begin{aligned}
+            A \sqsubseteq&~\exists r.(B \sqcap C) \\
+            B \sqsubseteq&~D \\
+            C \sqsubseteq&~E \\
+            D \sqcap E \sqsubseteq&~A \\
+            \exists r.\exists r.A \sqsubseteq&~B \\
+        \end{aligned}
+        \rightarrow
+        \begin{aligned}
+            \mathbf{A} \sqsubseteq&~\mathbf{\exists r.X} \\
+            \mathbf{X} \sqsubseteq&~\mathbf{B \sqcap C} \\
+            \mathbf{B \sqcap C} \sqsubseteq&~\mathbf{X} \\
+            B \sqsubseteq&~D \\
+            C \sqsubseteq&~E \\
+            D \sqcap E \sqsubseteq&~A \\
+            \exists r.\exists r.A \sqsubseteq&~B \\
+        \end{aligned}
+        \rightarrow
+        \begin{aligned}
+            A \sqsubseteq&~\exists r.X \\
+            \mathbf{X} \sqsubseteq&~\mathbf{B} \\
+            \mathbf{X} \sqsubseteq&~\mathbf{C} \\
+            B \sqcap C \sqsubseteq&~X \\
+            B \sqsubseteq&~D \\
+            C \sqsubseteq&~E \\
+            D \sqcap E \sqsubseteq&~A \\
+            \exists r.\exists r.A \sqsubseteq&~B \\
+        \end{aligned}
+        \rightarrow
+        \begin{aligned}
+            A \sqsubseteq&~\exists r.X \\
+            X \sqsubseteq&~B \\
+            X \sqsubseteq&~C \\
+            B \sqcap C \sqsubseteq&~X \\
+            B \sqsubseteq&~D \\
+            C \sqsubseteq&~E \\
+            D \sqcap E \sqsubseteq&~A \\
+            \mathbf{\exists r.Y} \sqsubseteq&~\mathbf{B} \\
+            \mathbf{Y} \sqsubseteq&~\mathbf{\exists r.A} \\
+            \mathbf{\exists r.A} \sqsubseteq&~\mathbf{Y} \\
+        \end{aligned}
+    \end{multline*}
+
+    Проверим истинность $\mathcal{O} \models A \sqsubseteq D$.
+    \begin{enumerate}
+        \item Пусть $R(r) = \varnothing$ и $S(Z) = \{Z\}$ для всех $r$ и $Z$;
+        \item $A \in S(A) ~\&~ A \sqsubseteq \exists r.X \implies R(r) \ni \{\langle A, X \rangle\}$;
+        \item $Y \in S(Y) ~\&~ Y \sqsubseteq \exists r.A \implies R(r) \ni \{\langle Y, A \rangle\}$;
+        \item $\langle A, X \rangle \in R(r) ~\&~ A \in S(X) ~\&~ \exists r.A \sqsubseteq Y \implies S(A) \ni Y$;
+        \item $\langle Y, A \rangle \in R(r) ~\&~ Y \in S(A) ~\&~ \exists r.Y \sqsubseteq B \implies S(Y) \ni B$;
+        \item $B \in S(Y) ~\&~ Y \in S(A) \implies B \in S(A) $;
+        \item $B \in S(A) ~\&~ B \sqsubseteq D \implies S(A) \ni D$;
+        \item $D \in S(A) \implies \mathcal{O} \models A \sqsubseteq D$ \\QED.
+    \end{enumerate}
+
+\end{document}

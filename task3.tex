@@ -1,0 +1,122 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm,amssymb,amsbsy}
+\usepackage{cmap}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{svg}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{hyperref}
+\usepackage{caption,subcaption}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{tabularx}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usepackage{standalone}
+\usepackage{ebproof}
+
+
+\renewcommand{\baselinestretch}{1.5}
+\newcommand{\rulesep}{\unskip\ \vrule\ }
+
+%\renewcommand{\#}{C{\lserif\#}}
+
+\newcommand{\code}[1]{\lstinline$#1$}
+%\newcommand{\code}[1]{#1}
+
+\newcommand{\op}[1]{\operatorname{#1}}
+\newcommand{\sonop}[4]{#1~\leftarrow~\mathbf{#2}[#3](#4)}
+\newcommand{\sonopa}[4]{#1~\leftarrow&~\mathbf{#2}[#3](#4)}
+
+\lstset{captionpos=bellow}
+\lstset{basicstyle=\small\ttfamily,showspaces=false,showstringspaces=false}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Определение}
+
+\theoremstyle{lemma}
+\newtheorem{lemma}{Лемма}
+
+\theoremstyle{statement}
+\newtheorem{statement}{Утверждение}
+
+\renewcommand\qedsymbol{QED}
+
+\newlength{\myleftlen}
+\newcommand{\setmyleftlen}[1]{\settowidth{\myleftlen}{\( \displaystyle
+#1\)}}
+\newcommand{\backup}{\hskip-\myleftlen\mkern-7mu}
+
+\tikzset{>=latex}
+
+\newcommand{\hsomet}[2]{\hsome{\textit{#1}}{\textbf{#2}}}
+\newcommand{\hsome}[2]{\exists#1.#2}
+\newcommand{\honlyt}[2]{\honly{\textit{#1}}{\textbf{#2}}}
+\newcommand{\honly}[2]{\forall#1.#2}
+\newcommand{\his}{\sqsubseteq}
+\newcommand{\hisb}{~{\color{red}\boldsymbol{\sqsubseteq}}~}
+\newcommand{\hand}{\sqcap}
+\newcommand{\hor}{\sqcup}
+
+\title{Решения задач по материалам лекции 4}
+\author{Алексей Глушко}
+
+\begin{document}
+\maketitle
+\section*{Задача 1}
+    Построим замыкаение $\op{init}(A)$ относительно правил вывода.
+    \begin{align}
+        & \op{init}(A) \tag{0} \label{0} \\
+        R_0(\ref{0}):~               & A \his^{\{\}} A           \label{1} \\
+        R_\his(ax1, \ref{1}):~       & A \his^{\{\}} \hsome{r}{A_1} \hand \hsome{s}{A_1}           \label{2} \\
+        R^-_\hand(\ref{2}):~         & A \his^{\{\}} \hsome{r}{A_1}                                \label{3} \\
+        R^-_\hand(\ref{2}):~         & A \his^{\{\}} \hsome{s}{A_1}                                \label{4} \\
+        R_{init}(\ref{3}):~          & \op{init}(A_1)                                              \label{5} \\
+        R_0(\ref{5}):~               & A_1 \his^{\{\}} A_1                                         \label{6} \\
+        R_\top(\ref{5}):~            & A_1 \his^{\{\}} \top                                        \label{7} \\
+        R_\his(ax2, \ref{7}):~       & A_1 \his^{\{\}} B_1 \hand B_2                               \label{8} \\
+        R^-_\hand(\ref{8}):~         & A_1 \his^{\{B_1\}} B_1                                      \label{9} \\
+        R^-_\hand(\ref{8}):~         & A_1 \his^{\{B_2\}} B_2                                      \label{10} \\
+        R_\his(ax3, \ref{9}):~       & A_1 \his^{\{B_1\}} C                                        \label{11} \\
+        R_\his(ax3, \ref{10}):~      & A_1 \his^{\{B_2\}} C                                        \label{12} \\
+        R_\exists(\ref{3},\ref{11}):~& A \his^{\{\hsome{r}{B_1}\}} \hsome{r}{C}                    \label{13} \\
+        R_\exists(\ref{3},\ref{12}):~& A \his^{\{\hsome{r}{B_2}\}} \hsome{r}{C}                    \label{14} \\
+        R_\exists(\ref{4},\ref{11}):~& A \his^{\{\hsome{s}{B_1}\}} \hsome{s}{C}                    \label{15} \\
+        R_\exists(\ref{4},\ref{12}):~& A \his^{\{\hsome{s}{B_2}\}} \hsome{s}{C}                    \label{16} \\
+        R^+_\hand(\ref{13},\ref{14},\ref{15},\ref{16}):~& A \his^{\{\hsome{r}{B_{1/2}} \hand \hsome{s}{B_{1/2}}\}}   \label{17} \\
+        R_\his(ax5, \ref{17}):~      & A \his^{\{\hsome{r}{B_{1/2}} \hand \hsome{s}{B_{1/2}}\}} A  \label{18}
+    \end{align}
+
+    Wanted definitions of $A$ in $\mathcal{O}$:
+    \begin{gather*}
+        \hsome{r}{B_1} \hand \hsome{s}{B_1} \\
+        \hsome{r}{B_1} \hand \hsome{s}{B_2} \\
+        \hsome{r}{B_2} \hand \hsome{s}{B_1} \\
+        \hsome{r}{B_2} \hand \hsome{s}{B_2}
+    \end{gather*}
+
+%\pagebreak
+\section*{Задача 2}
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}
+            \node[circle, draw, label={$A^{\mathcal{I}}$}] (ai) at (-4, 0) {};
+            \node[circle, draw, label={[align=center]$A_1$,\\$B^{\mathcal{I}}_1, B^{\mathcal{I}}_2, C^{\mathcal{I}}$,\\$B^{\mathcal{J}}_1, B^{\mathcal{J}}_2, C^{\mathcal{J}}$}] (a1) at (0, 0) {};
+            \node[circle, draw, label={$A^{\mathcal{J}}$}] (aj) at (4, 0) {};
+
+            \draw[->] (ai) to node[midway,above] {r} (a1);
+            \draw[->] (aj) to node[midway,above] {r} (a1);
+            \draw[->] (ai) to[out=-45, in=-135] node[midway,below] {$s^{\mathcal{I}}$} (a1);
+            \draw[->] (aj) to[out=-135, in=-45] node[midway,below] {$s^{\mathcal{J}}$} (a1);
+        \end{tikzpicture}
+    \end{figure}
+
+%\pagebreak
+\section*{Задача 3}
+    \dots
+
+\end{document}
